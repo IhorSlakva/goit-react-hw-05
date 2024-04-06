@@ -1,0 +1,15 @@
+.section {
+  padding-left: 20px;
+}
+
+.text {
+  margin-bottom: 10px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 3px;
+}

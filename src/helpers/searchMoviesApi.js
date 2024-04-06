@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const API_KEY = "5b875a5c086b540d33216f5f5e32ef4f";
+axios.defaults.baseURL = "https://api.themoviedb.org/3";
 
 const options = {
   headers: {
@@ -10,9 +11,9 @@ const options = {
 };
 
 export const searchTrendingMovies = async () => {
-  const url = `https://api.themoviedb.org/3/trending/movie/day?api_key=${API_KEY}`;
-  const response = axios.get(url, options);
+  const response = await axios.get(
+    `/trending/movie/day?api_key=${API_KEY}`,
+    options
+  );
   return response.data;
 };
-
-console.log(searchTrendingMovies());
