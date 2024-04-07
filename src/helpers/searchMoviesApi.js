@@ -17,3 +17,15 @@ export const searchTrendingMovies = async () => {
   );
   return response.data;
 };
+
+export const searchMovies = async (query) => {
+  const response = await axios.get(
+    `/search/movie?api_key=${API_KEY}query=${query}`
+  );
+  return response.data;
+};
+
+export const searchMovieDetails = async (movieId) => {
+  const response = await axios.get(`movie/${movieId}?api_key${API_KEY}`);
+  return response.data;
+};

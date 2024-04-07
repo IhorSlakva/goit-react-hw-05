@@ -26,6 +26,7 @@ const HomePage = () => {
 
   return (
     <section className={css.section}>
+      <h2 className={css.text}>Trending today</h2>
       {loading && <Loader />}
       {error && <p className={css.error}>{error}</p>}
       {movies.length > 0 && <MovieList movies={movies} />}
