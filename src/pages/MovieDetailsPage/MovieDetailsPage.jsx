@@ -1,9 +1,9 @@
-import { useParams } from "react-router-dom";
-import MovieList from "../../components/MovieList/MovieList";
-import { useEffect, useState } from "react";
+import { Link, Outlet, useLocation, useParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import MovieDetails from "../../components/MovieDetails/MovieDetails";
-import { searchMovies } from "../../helpers/searchMoviesApi";
+import { searchMovieDetails } from "../../helpers/searchMoviesApi";
 import css from "./MovieDetailsPage.module.css";
+import Loader from "../../components/Loader/Loader";
 
 const MovieDetailsPage = () => {
   const { movieId } = useParams();
@@ -11,23 +11,40 @@ const MovieDetailsPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
+  const location = useLocation();
+  const backLink = useRef(location.state?.from ?? "/");
+
   useEffect(() => {
+    if (!movieId) return;
     setLoading(true);
-    const searchMoviesDetails = async () => {
+    const searchMovies = async () => {
       try {
-        const response = await searchMovies(movieId);
-        setMovies(response.result);
+        const response = await searchMovieDetails(movieId);
+        setMovies(response);
       } catch (error) {
         setError(error.message);
+      } finally {
+        setLoading(false);
       }
     };
-    searchMoviesDetails();
+    searchMovies();
   }, [movieId]);
 
   return (
     <div>
-      {loading && <MovieDetails movies={movies} />}
+      {loading && <Loader />}
       {error && <p className={css.error}>{error}</p>}
+      <Link to={backLink.current}>Go back</Link>
+      {movies && <MovieDetails movies={movies} />}
+      <ul>
+        <li>
+          <Link to="cast">Cast</Link>
+        </li>
+        <li>
+          <Link to="reviews">Reviews</Link>
+        </li>
+      </ul>
+      <Outlet />
     </div>
   );
 };

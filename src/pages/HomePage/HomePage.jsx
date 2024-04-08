@@ -14,7 +14,7 @@ const HomePage = () => {
     const searchByTrendingCountries = async () => {
       try {
         const data = await searchTrendingMovies();
-        setMovies(data.results);
+        setMovies(data);
       } catch (error) {
         setError(error.message);
       } finally {
