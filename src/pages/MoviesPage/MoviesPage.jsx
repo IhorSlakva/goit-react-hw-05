@@ -1,4 +1,4 @@
-import { useParams, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import MoviesForm from "../../components/MoviesForm/MoviesForm";
 import { useEffect, useState } from "react";
 import Loader from "../../components/Loader/Loader";
@@ -7,7 +7,6 @@ import MovieList from "../../components/MovieList/MovieList";
 import { searchMoviesByQuery } from "../../helpers/searchMoviesApi";
 
 const MoviesPage = () => {
-  const { movieId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get("query");
 
@@ -20,7 +19,7 @@ const MoviesPage = () => {
   );
 
   useEffect(() => {
-    if (!query && !movieId) return;
+    if (!query) return;
     setLoading(true);
     const searchMovies = async () => {
       try {
@@ -33,7 +32,7 @@ const MoviesPage = () => {
       }
     };
     searchMovies();
-  }, [query, movieId]);
+  }, [query]);
 
   const handleSubmit = (value) => {
     setSearchParams({ query: value });
