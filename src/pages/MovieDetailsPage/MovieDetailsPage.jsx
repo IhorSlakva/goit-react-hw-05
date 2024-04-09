@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation, useParams } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import MovieDetails from "../../components/MovieDetails/MovieDetails";
 import { searchMovieDetails } from "../../helpers/searchMoviesApi";
 import css from "./MovieDetailsPage.module.css";
@@ -7,7 +7,7 @@ import Loader from "../../components/Loader/Loader";
 
 const MovieDetailsPage = () => {
   const { movieId } = useParams();
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
@@ -19,8 +19,8 @@ const MovieDetailsPage = () => {
     setLoading(true);
     const searchMovies = async () => {
       try {
-        const response = await searchMovieDetails(movieId);
-        setMovies(response);
+        const data = await searchMovieDetails(movieId);
+        setMovies(data);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -34,17 +34,24 @@ const MovieDetailsPage = () => {
     <div>
       {loading && <Loader />}
       {error && <p className={css.error}>{error}</p>}
-      <Link to={backLink.current}>Go back</Link>
+      <Link className={css.link} to={backLink.current}>
+        Go back
+      </Link>
       {movies && <MovieDetails movies={movies} />}
-      <ul>
-        <li>
-          <Link to="cast">Cast</Link>
-        </li>
-        <li>
-          <Link to="reviews">Reviews</Link>
-        </li>
-      </ul>
-      <Outlet />
+      <div className={css.infoContainer}>
+        <p>Additional information</p>
+        <ul className={css.listLink}>
+          <li>
+            <Link to="cast">Cast</Link>
+          </li>
+          <li>
+            <Link to="reviews">Reviews</Link>
+          </li>
+        </ul>
+      </div>
+      <Suspense fallback={<Loader />}>
+        <Outlet />
+      </Suspense>
     </div>
   );
 };

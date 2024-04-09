@@ -5,7 +5,7 @@ import Loader from "../../components/Loader/Loader";
 import css from "./HomePage.module.css";
 
 const HomePage = () => {
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
@@ -29,7 +29,7 @@ const HomePage = () => {
       <h2 className={css.text}>Trending today</h2>
       {loading && <Loader />}
       {error && <p className={css.error}>{error}</p>}
-      {movies.length > 0 && <MovieList movies={movies} />}
+      {movies && <MovieList movies={movies} />}
     </section>
   );
 };
